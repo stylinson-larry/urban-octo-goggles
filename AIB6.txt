@@ -1,0 +1,31 @@
+
+# Initial state
+state = {
+    "A": "table",
+    "B": "A",
+    "C": "table"
+}
+
+# Goal state
+goal = {
+    "A": "B",
+    "B": "C",
+    "C": "table"
+}
+
+def move(block, destination):
+    state[block] = destination
+    print("Move", block, "onto", destination)
+
+print("Initial State:", state)
+print("Goal State:", goal)
+print("\nPlan:")
+
+# Goal Stack Planning
+if state["B"] == "A":
+    move("B", "C")
+
+if state["A"] != "B":
+    move("A", "B")
+
+print("\nFinal State:", state)

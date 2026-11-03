@@ -1,0 +1,58 @@
+
+from heapq import heappush, heappop
+goal = (1, 2, 3, 4, 5, 6, 7, 8, 0)
+def heuristic(state):
+    distance = 0
+    for i, value in enumerate(state):
+        if value != 0:
+            goal_pos = goal.index(value)
+            distance += abs(i // 3 - goal_pos // 3)
+            distance += abs(i % 3 - goal_pos % 3)
+            
+    return distance
+
+def get_moves(state):
+    moves = []
+    zero = state.index(0)
+    r, c = zero // 3, zero % 3
+    for dr, dc in [(1,0), (-1,0), (0,1), (0,-1)]:
+        nr, nc = r + dr, c + dc
+
+        if 0 <= nr < 3 and 0 <= nc < 3:
+            new = list(state)
+            new[zero], new[nr*3+nc] = new[nr*3+nc], new[zero]
+            moves.append(tuple(new))
+    return moves
+def a_star(start):
+    queue = []
+    heappush(queue, (heuristic(start), 0, start, [start]))
+    visited = set()
+    while queue:
+        f, g, state, path = heappop(queue)
+        if state == goal:
+            return path
+        if state in visited:
+            continue
+        visited.add(state)
+
+        for next_state in get_moves(state):
+            if next_state not in visited:
+                new_g = g + 1
+                new_f = new_g + heuristic(next_state)
+                heappush(queue, (new_f, new_g, next_state, path + [next_state]))
+
+    return None
+
+
+# Example
+start = (1, 2, 3,
+         4, 0, 6,
+         7, 5, 8)
+
+solution = a_star(start)
+
+for state in solution:
+    print(state[0:3])
+    print(state[3:6])
+    print(state[6:9])
+    print()

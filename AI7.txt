@@ -1,0 +1,41 @@
+
+import random
+cities = 5
+
+distance = [
+    [0, 2, 9, 10, 7],
+    [2, 0, 6, 4, 3],
+    [9, 6, 0, 8, 5],
+    [10, 4, 8, 0, 6],
+    [7, 3, 5, 6, 0]
+]
+def cost(path):
+    total = 0
+    for i in range(cities - 1):
+        total += distance[path[i]][path[i + 1]]
+    total += distance[path[-1]][path[0]]
+    return total
+def neighbors(path):
+    result = []
+    for i in range(1, cities):
+        for j in range(i + 1, cities):
+            new_path = path[:]
+            new_path[i], new_path[j] = new_path[j], new_path[i]
+            result.append(new_path)
+    return result
+
+beam = []
+for i in range(3):
+    path = list(range(cities))
+    random.shuffle(path)
+    beam.append(path)
+
+for _ in range(10):
+    all_paths = []
+    for path in beam:
+        all_paths += neighbors(path)
+    all_paths.sort(key=cost)
+    beam = all_paths[:3]
+best = min(beam, key=cost)
+print("Best Path:", best)
+print("Minimum Cost:", cost(best))

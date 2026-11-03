@@ -1,0 +1,28 @@
+
+def solve(board, row):
+    # All 8 queens are placed
+    if row == 8:
+        return True
+    for col in range(8):
+        # Check if the queen can be placed
+        safe = True
+        for i in range(row):
+            if board[i] == col or abs(board[i] - col) == abs(i - row):
+                safe = False
+                break
+        if safe:
+            board[row] = col
+
+            # Place queen in next row
+            if solve(board, row + 1):
+                return True
+            # Backtrack
+            board[row] = -1
+    return False
+board = [-1] * 8
+if solve(board, 0):
+    print("Solution:")
+    for row in range(8):
+        print(". " * board[row] + "Q " + ". " * (7 - board[row]))
+else:
+    print("No solution")

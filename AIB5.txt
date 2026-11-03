@@ -1,0 +1,27 @@
+blocks = {"A": "table", "B": "table", "C": "table"}
+goal = {"A": "B", "B": "C", "C": "table"}
+
+def clear(block):
+    return block not in blocks.values()
+
+def move(block, destination):
+    blocks[block] = destination
+    print("Move", block, "onto", destination)
+
+def solve():
+    for block in ["C", "B", "A"]:
+        if blocks[block] != goal[block]:
+            if not clear(block):
+                for b in blocks:
+                    if blocks[b] == block:
+                        move(b, "table")
+            if goal[block] != "table" and not clear(goal[block]):
+                for b in blocks:
+                    if blocks[b] == goal[block]:
+                        move(b, "table")
+            move(block, goal[block])
+
+    print("Goal State:", blocks)
+
+print("Initial State:", blocks)
+solve()

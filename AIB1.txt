@@ -1,0 +1,33 @@
+
+from collections import deque
+# Grid: 0 = free cell, 1 = obstacle
+grid = [
+    [0, 0, 0, 0],
+    [1, 1, 0, 1],
+    [0, 0, 0, 0],
+    [0, 1, 1, 0]
+]
+start = (0, 0)
+goal = (3, 3)
+# Directions: up, down, left, right
+directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+queue = deque([(start, [start])])
+visited = {start}
+while queue:
+    current, path = queue.popleft()
+    if current == goal:
+        print("Path found:")
+        print(path)
+        break
+    x, y = current
+    for dx, dy in directions:
+        nx, ny = x + dx, y + dy
+        # Check valid position and obstacle
+        if (0 <= nx < len(grid) and
+            0 <= ny < len(grid[0]) and
+            grid[nx][ny] == 0 and
+            (nx, ny) not in visited):
+            visited.add((nx, ny))
+            queue.append(((nx, ny), path + [(nx, ny)]))
+else:
+    print("No path found")
